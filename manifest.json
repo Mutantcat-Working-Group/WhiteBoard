@@ -1,0 +1,35 @@
+{
+  "name": "在线白板 - Mutantcat WhiteBoard",
+  "short_name": "在线白板",
+  "lang": "zh-CN",
+  "dir": "ltr",
+  "description": "免费、开箱即用的网页版在线白板工具，支持画笔、便签、文本、素材、思维导图、流程图与多画板管理。",
+  "categories": ["productivity", "education", "design"],
+  "icons": [
+    {
+      "src": "./img/icons/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./img/icons/android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./img/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "browser"],
+  "orientation": "any",
+  "background_color": "#ffffff",
+  "theme_color": "#4DBA87",
+  "prefer_related_applications": false
+}
