@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.3e70c39bbdbd8ba77c3ed1b4f591d8ee.js"
+  "/precache-manifest.3d5c79302aefc4960c30235b93629b58.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "online-whiteboard"});
