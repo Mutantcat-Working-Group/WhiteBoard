@@ -418,7 +418,7 @@ export default {
             shortcuts: 'ctrl+m',
             cursor: '',
             enable: true,
-            contextmenu: true,
+            contextmenu: false,
             type: 'materials',
             types: ['draw', 'line', 'text', 'note', 'preview'],
             divider: true
