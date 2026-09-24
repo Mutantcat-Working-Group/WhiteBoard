@@ -1021,8 +1021,8 @@ export default {
             _t.$t('L10113'),
             h('a', {
               style: { color: '#2D8cF0', textDecoration: 'none' },
-              attrs: { href: 'https://www.mutantcat.org/', target: '_blank', rel: 'noopener noreferrer' }
-            }, 'Mutantcat'),
+              attrs: { href: 'https://github.com/Mutantcat-Working-Group', target: '_blank', rel: 'noopener noreferrer' }
+            }, 'Mutantcat-Working-Group'),
             _t.$t('L10114')
           ])
         ])

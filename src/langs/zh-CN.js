@@ -40,6 +40,6 @@ export default {
   L10110: '在画板区域右键菜单中可选择导出图片为 PNG。',
   L10111: '本项目 Fork 自 ',
   L10112: '，在其基础上进行了本地化与持续维护。',
-  L10113: '此服务由 ',
-  L10114: ' 提供与运维就行。'
+  L10113: '由异猫工作群（mutantcat.org）发行，',
+  L10114: ' GitHub：https://github.com/Mutantcat-Working-Group'
 }

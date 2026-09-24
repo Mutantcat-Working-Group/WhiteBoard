@@ -1,3 +1,5 @@
+// Mutantcat WhiteBoard — 由异猫工作群（mutantcat.org）发行
+// GitHub: https://github.com/Mutantcat-Working-Group
 import Vue from 'vue'
 import * as Cookies from 'js-cookie'
 import XDrag from 'x-dragandresize'

@@ -40,6 +40,6 @@ export default {
   L10110: 'Right-click on the board area to export the current view as a PNG image.',
   L10111: 'This project is forked from ',
   L10112: ', with ongoing localization and maintenance.',
-  L10113: 'This service is provided and operated by ',
-  L10114: '.'
+  L10113: 'Distributed by the Mutantcat Working Group (mutantcat.org), ',
+  L10114: ' GitHub: https://github.com/Mutantcat-Working-Group'
 }
