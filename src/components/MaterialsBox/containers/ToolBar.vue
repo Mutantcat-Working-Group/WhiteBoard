@@ -714,7 +714,6 @@
     methods: {
       handleDropdownClick (item, type, name) {
         let _t = this
-        console.log('item', item, type, name)
         _t.selected[item.name] = name
         let child = item.children[name]
         _t.formData[item.name] = child.name
@@ -745,7 +744,6 @@
         if (item.disabled) {
           return
         }
-        console.log('MaterialsEditor tool click', item.name, type, val)
         if (type === 'center') {
           let data = {}
           switch (item.name) {

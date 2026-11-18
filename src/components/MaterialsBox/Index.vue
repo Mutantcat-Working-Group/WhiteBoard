@@ -83,6 +83,10 @@
         let _t = this
         _t.isShow = false
         _t.mode = null
+        if (_t.saveTimer) {
+          clearTimeout(_t.saveTimer)
+          _t.saveTimer = null
+        }
       }
     },
     created () {

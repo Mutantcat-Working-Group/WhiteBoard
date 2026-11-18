@@ -646,7 +646,6 @@ export default {
       create (position, content) {
         let _t = this
         if (_t.toolTip.currentTip) {
-          console.warn('Editor Warn:: can\'t creat tootip when currentTip not null!')
           return
         }
         let canvas = _t.graph.get('canvas')

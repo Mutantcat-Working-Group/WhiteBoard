@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag to backfill checksums for (for example v1.0.20260920)'
+        description: 'Release tag to backfill checksums for (for example v1.0.20261118)'
         required: true
         type: string
       force:

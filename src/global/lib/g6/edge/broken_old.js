@@ -266,7 +266,6 @@ export default {
           path.push([ 'L', point.x, point.y ])
         }
       })
-      console.log('path', path)
       return path
     }
   }

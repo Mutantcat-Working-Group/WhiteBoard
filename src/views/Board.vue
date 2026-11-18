@@ -22,12 +22,19 @@
     },
     created () {
       let _t = this
-      // 分发mutation，新增画板
-      _t.$store.commit('board/list/add', {
-        id: new Date().getTime(),
-        screenshot: ''
-      })
-      _t.$store.commit('board/activeBoardIndex/update', 0)
+      let boardList = _t.$store.getters.boardList
+      // 恢复已保存的画板；没有历史数据时新建一块
+      if (!boardList.length) {
+        _t.$store.commit('board/list/add', {
+          id: new Date().getTime(),
+          screenshot: ''
+        })
+        boardList = _t.$store.getters.boardList
+      }
+      let index = _t.$store.getters.activeBoardIndex
+      if (index === null || !boardList[index]) {
+        _t.$store.commit('board/activeBoardIndex/update', 0)
+      }
     }
   }
 </script>

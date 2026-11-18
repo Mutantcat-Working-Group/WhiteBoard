@@ -1,0 +1,5 @@
+# 第三方生成的图标文件
+src/assets/iconfont
+
+# G6 v4 历史源码拷贝，当前仅作参考，不参与构建
+src/global/lib/g6/G6

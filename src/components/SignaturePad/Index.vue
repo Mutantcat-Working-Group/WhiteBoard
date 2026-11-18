@@ -160,7 +160,9 @@
               last
             ]
           })
-          return _t.signaturePad.fromData(data)
+          let result = _t.signaturePad.fromData(data)
+          _t.commitData()
+          return result
         }
       },
       // 撤回
@@ -173,10 +175,12 @@
           data: _t.undoHistory
         })
         if (last) {
-          return _t.signaturePad.fromData([
+          let result = _t.signaturePad.fromData([
             ...data,
             last
           ])
+          _t.commitData()
+          return result
         }
       },
       // 将签名图像作为点组数组返回
@@ -227,6 +231,16 @@
           data: []
         })
       },
+      // 把当前笔画数据写回 store，触发持久化
+      commitData () {
+        let _t = this
+        if (_t.boardList[_t.activeBoardIndex]) {
+          _t.$store.commit('board/signaturePad/data/update', {
+            index: _t.activeBoardIndex,
+            data: _t.toData()
+          })
+        }
+      },
       handlePad (newVal, oldVal) {
         let _t = this
         // 更新旧画板
@@ -249,6 +263,8 @@
           // 清除画布
           _t.clear()
           _t.fromData(_t.boardList[newVal].signaturePad.data)
+          // 把加载后的点数据写回 store，避免 resize 等操作丢失
+          _t.commitData()
         }
       }
     },
@@ -259,7 +275,8 @@
       _t.signaturePad = new SignaturePad(canvas, {
         ..._t.defOptions,
         ..._t.options,
-        onBegin: _t.handleOnBegin
+        onBegin: _t.handleOnBegin,
+        onEnd: _t.commitData
       })
 
       // 绑定resize事件
@@ -267,6 +284,10 @@
       window.addEventListener('resize', _t.onResizeHandler, false)
       // 触发resize事件
       _t.resizeCanvas()
+      // 载入当前画板的笔画数据
+      if (_t.boardList[_t.activeBoardIndex]) {
+        _t.handlePad(_t.activeBoardIndex)
+      }
       // 监听事件
       _t.$X.utils.bus.$on('board/list/remove', function () {
         _t.handlePad(0)

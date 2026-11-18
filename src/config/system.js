@@ -5,7 +5,7 @@
  */
 
 export default {
-  version: '1.0.0',
+  version: '1.0.20261118',
   name: '在线白板',
   title: '在线白板',
   subtitle: '在线白板 Mutantcat WhiteBoard',

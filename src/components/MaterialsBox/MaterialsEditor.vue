@@ -24,6 +24,8 @@
 </template>
 
 <script>
+  import { mapGetters } from 'vuex'
+
   import ToolBar from './containers/ToolBar'
   import Sketchpad from './containers/Sketchpad'
   import PanelLeft from './containers/PanelLeft'
@@ -52,7 +54,17 @@
           // 编辑器状态：add || edit || preview
           status: 'add'
         },
-        editor: null
+        editor: null,
+        saveTimer: null
+      }
+    },
+    computed: {
+      ...mapGetters([
+        'activeBoardIndex',
+        'boardList'
+      ]),
+      currentBoard () {
+        return this.boardList[this.activeBoardIndex] || {}
       }
     },
     methods: {
@@ -61,10 +73,7 @@
         let el = _t.$el
         let sketchpad = el.querySelector('#sketchpad')
         let navigator = el.querySelector('#navigator')
-        console.log('sketchpad', sketchpad, sketchpad.clientWidth, sketchpad.clientHeight)
-        console.log('navigator', navigator, navigator.clientWidth, navigator.clientHeight)
         let size = [navigator.clientWidth, parseInt(navigator.clientWidth * sketchpad.clientHeight / sketchpad.clientWidth)]
-        console.log('size', size)
         const minimap = new Minimap({
           container: navigator,
           type: 'delegate',
@@ -144,35 +153,49 @@
         // _t.editor.on('node:contextmenu', _t._nodeContextmenu)
         _t.editor.on('edge:mousedown', _t._edgeMousedown)
         _t.editor.on('editor:getItem', function (data) {
-          console.log('editor:getItem', JSON.stringify(data))
           _t.$store.commit('board/materials/editor/currentItem/update', data)
         })
         _t.editor.on('editor:setItem', function (data) {
-          console.log('editor:setItem', JSON.stringify(data))
           let item = _t.editor.findById(data.id)
           if (item) {
             _t.editor.updateItem(item, data.model)
             _t.editor.paint()
           }
         })
+        // 载入已保存的图数据
+        let saved = _t.currentBoard && _t.currentBoard.materials
+        if (saved && saved.nodes && saved.nodes.length) {
+          _t.editor.read(saved)
+          _t.editor.fitView()
+        }
+        // 图数据变更后回写 store
+        _t.editor.on('afterpaint', _t.scheduleSave)
+      },
+      scheduleSave () {
+        let _t = this
+        if (_t.saveTimer) {
+          clearTimeout(_t.saveTimer)
+        }
+        _t.saveTimer = setTimeout(function () {
+          _t.saveTimer = null
+          if (!_t.editor || _t.activeBoardIndex === null || _t.activeBoardIndex === undefined) {
+            return
+          }
+          _t.$store.commit('board/materials/data/update', {
+            index: _t.activeBoardIndex,
+            data: _t.editor.save()
+          })
+        }, 500)
       },
       _canvasMousedown () {
         let _t = this
-        console.log('_canvasMousedown ')
         _t.doClearAllStates()
       },
       _canvasMouseup () {
-        // let _t = this
-        console.log('_canvasMouseup')
-        // _t.editor.setMode('edit')
       },
       _editorClick (event) {
-        console.log('_editorClick', event)
       },
       _nodeClick (event) {
-        // let _t = this
-        console.log('_nodeClick', event)
-        // _t.editor.setItemState(event.item, 'active', true)
       },
       _nodeMousedown (event) {
         let _t = this
@@ -194,12 +217,10 @@
         _t.editor.setItemState(event.item, 'hover', false)
       },
       _nodeContextmenu (event) {
-        console.log('_nodeContextmenu', event)
       },
       _edgeMousedown (event) {
         let _t = this
         _t.doClearAllStates()
-        console.log('_edgeMousedown', event)
         if (event.item && !event.item.destroyed) {
           _t.editor.setItemState(event.item, 'active', !event.item.hasState('active'))
         }
@@ -245,7 +266,6 @@
       },
       doAddNode (info) {
         let _t = this
-        console.log('doAddNode', info)
         let node = {
           id: G6.Util.uniqueId(),
           shape: info.shape,
@@ -390,7 +410,6 @@
             _t.editor.getEdges().forEach(edge => {
               if (edge.hasState('active')) {
                 let { style } = edge.getModel()
-                console.log('update')
                 _t.editor.updateItem(edge, {
                   style: {
                     ...style,
@@ -445,6 +464,18 @@
       _t.$X.utils.bus.$on('board/materials/editor/currentItem/update', function (data) {
         _t.editor.emit('editor:setItem', data)
       })
+    },
+    beforeDestroy () {
+      let _t = this
+      if (_t.saveTimer) {
+        clearTimeout(_t.saveTimer)
+        _t.saveTimer = null
+      }
+      if (_t.editor) {
+        _t.editor.off('afterpaint', _t.scheduleSave)
+        _t.editor.destroy()
+        _t.editor = null
+      }
     }
   }
 </script>

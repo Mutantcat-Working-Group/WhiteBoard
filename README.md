@@ -44,9 +44,9 @@
 
 ### 四、安装与下载
 
-最新版本：`1.0.20260920`
+最新版本：`1.0.20261118`
 
-从 [Releases](https://github.com/Mutantcat-Working-Group/WhiteBoard/releases) 下载 `whiteboard-1.0.20260920.tar.gz`，解压即得一整套静态站点，用任意静态服务器托管 `docs` 目录即可使用，另附 `checksums.txt` 供校验。版本号使用纯日期递增（如 `1.0.20260920`），推送同族标签（`v` 前缀可选）后，GitHub Actions 会自动构建并发布 Release。
+从 [Releases](https://github.com/Mutantcat-Working-Group/WhiteBoard/releases) 下载 `whiteboard-1.0.20261118.tar.gz`，解压即得一整套静态站点，用任意静态服务器托管 `docs` 目录即可使用，另附 `checksums.txt` 供校验。版本号使用纯日期递增（如 `1.0.20261118`），推送同族标签（`v` 前缀可选）后，GitHub Actions 会自动构建并发布 Release。
 
 ### 五、快速上手
 

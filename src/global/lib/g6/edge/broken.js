@@ -16,12 +16,10 @@ export default {
       const controlPoints = this.getControlPoints(cfg)
       let points = [startPoint]
       if (controlPoints) {
-        console.log('controlPoints', controlPoints)
         points.push(controlPoints)
       }
       points.push(endPoint)
       let path = this.getPath(points)
-      console.log('path', path)
       const keyShape = group.addShape('path', {
         className: 'edge-shape',
         attrs: {

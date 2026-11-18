@@ -48,6 +48,6 @@ module.exports = {
       .plugin('provide')
       .use(webpack.ProvidePlugin, [{
         'window.Quill': 'quill'
-      }]);
+      }])
   }
 }

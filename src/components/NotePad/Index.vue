@@ -278,8 +278,9 @@
           // 便签标题
           title: '',
           // 便签内容
-          content: '',
-          backgroundColor: '#FFE66E'
+          content: (this.info && this.info.content) || '',
+          // 便签底色
+          backgroundColor: (this.info && this.info.backgroundColor) || '#FFE66E'
         },
         dragConfig: {
           // 拖拽配置
@@ -300,7 +301,10 @@
               start: null,
               move: null,
               done: (style) => {
-                console.log('drag done', style)
+                this.$emit('move', {
+                  x: parseFloat(style.left),
+                  y: parseFloat(style.top)
+                })
               }
             }
           },
@@ -331,7 +335,12 @@
               start: null,
               move: null,
               done: (style) => {
-                console.log('resize done', style)
+                this.$emit('resize', {
+                  width: parseFloat(style.width),
+                  height: parseFloat(style.height),
+                  x: style.left === undefined ? undefined : parseFloat(style.left),
+                  y: style.top === undefined ? undefined : parseFloat(style.top)
+                })
               }
             }
           }
@@ -376,6 +385,12 @@
             backgroundColor: _t.formData.backgroundColor,
             zIndex: _t.active ? 500 : 200
           }
+          if (_t.info.width) {
+            style.width = _t.info.width + 'px'
+          }
+          if (_t.info.height) {
+            style.height = _t.info.height + 'px'
+          }
         }
         return style
       },
@@ -383,6 +398,18 @@
         let _t = this
         return {
           backgroundColor: _t.formData.backgroundColor
+        }
+      }
+    },
+    watch: {
+      formData: {
+        deep: true,
+        handler (val) {
+          // 把内容回写到 info，随画板一起持久化
+          this.$emit('change', {
+            content: val.content,
+            backgroundColor: val.backgroundColor
+          })
         }
       }
     },

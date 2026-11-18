@@ -1,7 +1,7 @@
 # Online whiteboard image: builds the Vue app and serves it with nginx.
 FROM node:18-alpine AS build
 
-ARG VERSION=1.0.20260920
+ARG VERSION=1.0.20261118
 
 WORKDIR /app
 
@@ -13,7 +13,7 @@ RUN yarn build
 
 FROM nginx:1.27-alpine AS runtime
 
-ARG VERSION=1.0.20260920
+ARG VERSION=1.0.20261118
 
 COPY --from=build /app/docs /usr/share/nginx/html
 

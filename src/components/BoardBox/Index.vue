@@ -68,7 +68,7 @@
       <!-- 文本 -->
       <TextPad
         v-for="(item, index) in currentBoard.textList"
-        :key="'text_pad_' + index"
+        :key="item.id"
         :info="item"
         :disabled="actionType !== 'text'"
         :active="currentBoard.activePad && currentBoard.activePad.name === 'text' && currentBoard.activePad.index === index"
@@ -76,12 +76,15 @@
         @blur="() => handleTextPadBlur(index)"
         @focus="() => handleTextPadFocus(index)"
         @click="() => handleTextPadClick(index)"
+        @change="(data) => handlePadChange('textList', index, data)"
+        @move="(data) => handlePadChange('textList', index, data)"
+        @resize="(data) => handlePadChange('textList', index, data)"
       >
       </TextPad>
       <!-- 便签 -->
       <NotePad
         v-for="(item, index) in currentBoard.noteList"
-        :key="'note_pad_' + index"
+        :key="item.id"
         :info="item"
         :disabled="actionType !== 'note'"
         :active="currentBoard.activePad && currentBoard.activePad.name === 'note' && currentBoard.activePad.index === index"
@@ -89,6 +92,9 @@
         @blur="() => handleNotePadBlur(index)"
         @focus="() => handleNotePadFocus(index)"
         @click="() => handleNotePadClick(index)"
+        @change="(data) => handlePadChange('noteList', index, data)"
+        @move="(data) => handlePadChange('noteList', index, data)"
+        @resize="(data) => handlePadChange('noteList', index, data)"
       >
       </NotePad>
     </div>
@@ -661,8 +667,6 @@ export default {
       _t.initContextMenuList()
       // 绑定热键
       _t.bindShortcuts()
-      // 绑定unload
-      _t.bindUnload()
     },
     handleActiveTool (name, defName) {
       let _t = this
@@ -813,7 +817,6 @@ export default {
       let _t = this
       let el = _t.signaturePad
       if (!item.types.includes(_t.actionType)) {
-        console.log('WhiteBoard tool disabled!')
         return false
       }
       switch (item.name) {
@@ -873,7 +876,7 @@ export default {
           el.redo()
           break
         case 'image':
-          console.log('WhiteBoard Tool image trigger!')
+          // 暂未实现
           break
         case 'clear':
           _t.$Modal.confirm({
@@ -886,6 +889,8 @@ export default {
               _t.currentBoard.textList = []
               // 清除便签
               _t.currentBoard.noteList = []
+              // 同步清空后的笔画数据
+              el.commitData()
             }
           })
           break
@@ -898,7 +903,7 @@ export default {
             let fileName = _t.$X.config.system.name + '_' + _t.$X.utils.filters.formatDate(new Date(), 'YYYYMMDDhhmmss')
             _t.$X.utils.file.downloadFile(fileName, data)
           }).catch(function (error) {
-            console.warn('html2canvas render error!', error)
+            _t.$Message.error(error && error.message ? error.message : String(error))
           })
           break
         case 'fullScreen':
@@ -953,6 +958,8 @@ export default {
               _t.currentBoard.textList = []
               // 清除便签
               _t.currentBoard.noteList = []
+              // 同步清空后的笔画数据
+              el.commitData()
             }
           })
           break
@@ -974,7 +981,7 @@ export default {
               _t.gridBox.doShow(data)
             }
           }).catch(function (error) {
-            console.warn('html2canvas render error!', error)
+            _t.$Message.error(error && error.message ? error.message : String(error))
           })
           break
         case 'materials':
@@ -1047,6 +1054,7 @@ export default {
       let _t = this
       if (_t.actionStatus === 'text-add') {
         _t.currentBoard.textList.push({
+          id: _t.$X.utils.filters.uniqueId(),
           ...info
         })
         _t.handleTextPadClick(_t.currentBoard.textList.length - 1)
@@ -1056,6 +1064,18 @@ export default {
       let _t = this
       _t.currentBoard.textList.splice(index, 1)
       _t.actionStatus = 'text-add'
+    },
+    handlePadChange (listName, index, data) {
+      let _t = this
+      let item = _t.currentBoard[listName] && _t.currentBoard[listName][index]
+      if (!item) {
+        return
+      }
+      Object.keys(data).forEach(key => {
+        if (data[key] !== undefined && data[key] !== null && !Number.isNaN(data[key])) {
+          _t.$set(item, key, data[key])
+        }
+      })
     },
     handleTextPadClose (index) {
       let _t = this
@@ -1087,6 +1107,7 @@ export default {
       let _t = this
       if (_t.actionStatus === 'note-add') {
         _t.currentBoard.noteList.push({
+          id: _t.$X.utils.filters.uniqueId(),
           ...info
         })
         _t.handleNotePadClick(_t.currentBoard.noteList.length - 1)

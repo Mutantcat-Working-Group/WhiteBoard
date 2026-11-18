@@ -5,6 +5,8 @@
  */
 
 export default {
+  // 生成唯一 id
+  uniqueId: () => `${Date.now().toString(36)}${Math.random().toString(36).slice(2, 8)}`,
   // 日期格式化
   formatDate: (date, fmt = 'YYYY-MM-DD hh:mm') => {
     if (!(date instanceof Date)) {
